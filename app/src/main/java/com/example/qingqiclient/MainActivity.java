@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 SecuredPreferenceStore preferenceStore = SecuredPreferenceStore.getSharedInstance();
                 preferenceStore.edit().putString("tel",tel_edit.getText().toString()).apply();
                 preferenceStore.edit().putString("password", password_edit.getText().toString()).apply();
-                Intent intent = new Intent(getApplicationContext(),Second.class);
+                Intent intent = new Intent(getApplicationContext(),All_EI_Info.class);
                 startActivity(intent);
             }
         });
