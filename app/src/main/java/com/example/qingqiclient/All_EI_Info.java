@@ -3,10 +3,14 @@ package com.example.qingqiclient;
  * 这个布局用来展示用户的已发送快递信息，用户可直接在此页面上查看各快递信息的状态，当然可以点击某快递信息，在新的详细信息活动中删除那些还未取的快递
  */
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 import com.example.qingqiclient.entity.EI;
 import com.example.qingqiclient.utils.Constant;
@@ -21,25 +25,30 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class All_EI_Info extends AppCompatActivity {
+public class All_EI_Info extends AppCompatActivity implements View.OnClickListener{
 
     //存放获取到的信息
     private static List<EI> eiList = new ArrayList<>();
+
+    //用于表示悬浮按钮
+    private FloatingActionButton add_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.all_ei_info);
 
+        add_btn = (FloatingActionButton) findViewById(R.id.add_btn);
+        add_btn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(All_EI_Info.this, AddEIActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //发送请求，获得数据
         sendRequestforEIList();
-
-        //下面开始组装RecyclerView
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        EIAdapter eiAdapter = new EIAdapter(eiList);
-        recyclerView.setAdapter(eiAdapter);
 
     }
 
@@ -71,6 +80,8 @@ public class All_EI_Info extends AppCompatActivity {
 
                     //解析请求，获得EI数组
                     eiList = JsonUtils.parseEIListWithGSON(responseData);
+                    //在下面这个方法中执行界面更新
+                    UIchange(eiList);
                     System.out.println(eiList);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -79,7 +90,31 @@ public class All_EI_Info extends AppCompatActivity {
         }).start();
     }
 
+    private void UIchange(final List<EI> eiList) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //下面开始组装RecyclerView
+                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(All_EI_Info.this);
+                recyclerView.setLayoutManager(layoutManager);
+                EIAdapter eiAdapter = new EIAdapter(eiList);
+                recyclerView.setAdapter(eiAdapter);
+            }
+        });
+    }
 
 
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.add_btn:
+                //加入用户按下悬浮式按钮的逻辑，跳入增加信息的活动界面
+                Intent intent = new Intent(All_EI_Info.this, AddEIActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".All_EI_Info" />
-        <activity android:name=".EI_Info"></activity>
+        <activity android:name=".EI_Info" />
+        <activity android:name=".AddEIActivity"></activity>
     </application>
 
 </manifest>
