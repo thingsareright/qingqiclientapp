@@ -20,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".All_EI_Info"></activity>
+        <activity android:name=".All_EI_Info" />
+        <activity android:name=".EI_Info"></activity>
     </application>
 
 </manifest>

@@ -27,4 +27,17 @@ public class JsonUtils {
         eiList = gson.fromJson(jsonData, new TypeToken<List<EI>>(){}.getType());
         return eiList;
     }
+
+    /**
+     * 这个方法用来解析一段与EI类对应的json数组
+     * 返回一个EI对象
+     * @param jsonData
+     * @return
+     */
+    public static EI parseEIWithGSON(String jsonData){
+        EI ei = new EI();
+        Gson gson = new Gson();
+        ei = gson.fromJson(jsonData, EI.class);
+        return ei;
+    }
 }

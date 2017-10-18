@@ -1,16 +1,18 @@
 package com.example.qingqiclient.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/10/17 0017.
  * 这个类主要是为了接收网络请求返回的json包而编写的
- * json返回的是下面这种元素组成的数组：
+ * 同时为了方便信息在活动中传递，我们将这个类序列化
  */
 
-public class EI {
+public class EI implements Serializable{
     private Long id;
     private String awb;
     private String tel;
-    private String tms;
+    private String sms;
     private String address;
     private Long state;
     private Long userid;
@@ -40,12 +42,12 @@ public class EI {
         this.tel = tel;
     }
 
-    public String getTms() {
-        return tms;
+    public String getSms() {
+        return sms;
     }
 
-    public void setTms(String tms) {
-        this.tms = tms;
+    public void setSms(String sms) {
+        this.sms = sms;
     }
 
     public String getAddress() {
