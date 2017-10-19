@@ -1,4 +1,4 @@
-package com.example.qingqiclient;
+package com.example.qingqiclient.adapter;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -7,11 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.qingqiclient.EI_Info;
+import com.example.qingqiclient.R;
 import com.example.qingqiclient.entity.EI;
 
 import java.util.List;
-
-import static android.support.v4.content.ContextCompat.startActivity;
 
 /**
  * Created by Administrator on 2017/10/18 0018.

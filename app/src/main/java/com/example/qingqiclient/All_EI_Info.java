@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.example.qingqiclient.adapter.EIAdapter;
 import com.example.qingqiclient.entity.EI;
 import com.example.qingqiclient.utils.Constant;
 import com.example.qingqiclient.utils.JsonUtils;

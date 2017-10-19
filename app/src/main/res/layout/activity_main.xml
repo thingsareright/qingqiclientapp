@@ -1,56 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.qingqiclient.MainActivity">
-    <ImageView
-        android:id="@+id/qingqiicon"
-        android:layout_width="80sp"
-        android:layout_height="80sp"
-        android:layout_marginTop="80sp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/qingqiicon"/>
+    android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/motto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textSize="20sp"
-        android:text="欢迎使用轻骑快送"
-        android:layout_below="@id/qingqiicon"
-        android:layout_marginTop="10sp"
-        android:layout_centerHorizontal="true"/>
+    <LinearLayout
+        android:id="@+id/bottomlinear"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="#DCDCDC">
+        <Button
+            android:id="@+id/btn_first"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:padding="-5dp"
+            android:textSize="14sp"
+            android:text="登录"
+            />
+        <Button
+            android:id="@+id/btn_second"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:textSize="14sp"
+            android:text="注册"/>
+        <Button
+            android:id="@+id/btn_third"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.5"
+            android:textSize="14sp"
+            android:text="忘记密码"/>
+        <Button
+            android:id="@+id/btn_four"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:textSize="14sp"
+            android:text="重置密码"/>
 
-    <EditText
-        android:id="@+id/tel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15sp"
-        android:layout_below="@id/motto"
-        android:hint="请输入手机号" >
-    </EditText>
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15sp"
-        android:layout_below="@id/tel"
-        android:layout_centerHorizontal="true"
-        android:hint="请输入密码" >
-    </EditText>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/cursorarea"
+        android:layout_width="fill_parent"
+        android:background="#CDCDCD"
+        android:orientation="horizontal"
+        android:layout_height="2dp">
+        <ImageView
+            android:id="@+id/cursor_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        </ImageView>
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/password"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15sp"
-        android:text="登录" />
 
-</RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/myviewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="12">
+    </android.support.v4.view.ViewPager>
+
+
+
+</LinearLayout>
