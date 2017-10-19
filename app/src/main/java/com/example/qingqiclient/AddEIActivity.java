@@ -3,6 +3,7 @@ package com.example.qingqiclient;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -37,6 +38,9 @@ public class AddEIActivity extends AppCompatActivity {
     //默认短信地址选择
     private static Long smsaddress = new Long(0);
 
+    //日志标识
+    private static final String LOG = "AddEIActivity";
+
 
     private static Map<Long, String> spinnerMap = new HashMap<>();
     static {
@@ -65,6 +69,8 @@ public class AddEIActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendSaveEIWithOkHttp(smsaddress);
+                Intent intent = new Intent(AddEIActivity.this, All_EI_Info.class);
+                startActivity(intent);
             }
         });
     }
@@ -109,19 +115,23 @@ public class AddEIActivity extends AppCompatActivity {
 
                     //发送请求，获得数字
                     OkHttpClient client = new OkHttpClient();
+                    //访问路径
+                    String urlStr = Constant.getServer() + "/ei/saveData?&usertel="+ usertel + "&password=" + password + "&awb="
+                            +  awb.getText().toString() + "&tel=" + tel.getText().toString() + "&sms="+
+                            sms.getText().toString() + "&address=" + address.getText().toString() +
+                            "&smsaddress=" + smsaddress;
+                    Log.e(LOG, "网络请求地址：" + urlStr);
                     Request request = new Request.Builder()
                             //指定访问的远程服务器
-                            .url(Constant.getServer() + "http://localhost:8080/ei/saveData?&usertel="+ usertel + "&password=" + password + "&awb="
-                                    +  awb.getText().toString() + "&tel=" + tel.getText().toString() + "&sms="+
-                                    sms.getText().toString() + "&address=" + address.getText().toString() +
-                                    "&smsaddress=" + smsaddress).build();
+                            .url(urlStr).build();
                     Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
+                    String responseData = response.body().toString();
                     if (responseData.equals(1)){
                         //在下面这个方法中执行界面更新
                         UIchange();
                     } else {
                         //TODO 请求失败的操作跳转页面
+                        Log.e(LOG,"ERROR");
                     }
 
 

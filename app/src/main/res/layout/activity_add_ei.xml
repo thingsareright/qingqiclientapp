@@ -10,12 +10,14 @@
         android:id="@+id/add_awb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="请输入物流编号："
          />
 
     <EditText
         android:id="@+id/add_tel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="请输入此快递收获者手机号："
          />
 
 
@@ -24,7 +26,9 @@
         android:id="@+id/add_sms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:hint="请复制短信信息："
         />
+
 
     <Spinner
         android:id="@+id/add_smsaddress"
@@ -32,14 +36,16 @@
         android:layout_width="wrap_content"
         android:spinnerMode="dialog"
         android:layout_height="wrap_content"
+
        />
 
 
 
     <EditText
         android:id="@+id/add_address"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="请输入收货地址："
         >
     </EditText>
 
