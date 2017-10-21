@@ -22,15 +22,25 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 
+import com.example.qingqiclient.All_EI_Info;
 import com.example.qingqiclient.MainActivity;
 import com.example.qingqiclient.R;
+import com.example.qingqiclient.utils.CheckInputUtils;
+import com.example.qingqiclient.utils.Constant;
+import com.example.qingqiclient.utils.JsonUtils;
 import com.mob.MobSDK;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import devliving.online.securedpreferencestore.SecuredPreferenceStore;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static cn.smssdk.SMSSDK.getSupportedCountries;
 import static cn.smssdk.SMSSDK.getVerificationCode;
@@ -45,6 +55,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private Button send_checkCode_btn;  //  发送验证码的btn
     private Button submmit; //提交按钮
     private EditText checkCode; //验证码
+    private EditText usertel;   //用户输入手机号注册
+    private EditText password;  //用户输入密码
+    private EditText password_confirm;  //用户再次输入密码确认
     //全局变量Handler，处理验证码回调
     private EventHandler handler;
 
@@ -52,9 +65,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_register, container, false);
+        //先初始化各个控件
         checkCode  = (EditText) v.findViewById(R.id.check_Code);
         submmit = (Button) v.findViewById(R.id.submmit);
         send_checkCode_btn = (Button) v.findViewById(R.id.send_checkCode);
+        usertel = (EditText) v.findViewById(R.id.register_tel);
+        password = (EditText) v.findViewById(R.id.register_password);
+        password_confirm = (EditText) v.findViewById(R.id.register_password_confirm);
 
 
         send_checkCode_btn.setOnClickListener(this);
@@ -73,7 +90,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                             @Override
                             public void run() {
                                 Toast.makeText(getContext(),"验证成功",Toast.LENGTH_SHORT).show();
-
+                                //下面执行验证码验证成功之后的逻辑，实行注册
+                                sendRegisterWithOkHttp(Constant.getServer() + "/user/register?tel=" + usertel.getText().toString() +
+                                "&password=" + password.getText().toString());
                             }
                         });
 
@@ -115,15 +134,63 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     }
 
 
-    public void play(View view) {
-        //获取验证码
-        SMSSDK.getVerificationCode("86","18838951998");
+    /**
+     * 执行注册的网络请求逻辑
+     * @param s
+     */
+    private void sendRegisterWithOkHttp(final String s) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    //发送请求，获得数字
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            //指定访问的远程服务器
+                            .url(s).build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+
+                    if (responseData.equals("1")){
+                        //注册成功
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //要注意先把tel和password的值存入SharedPreferences中，我们这里用了一个开源库进行加密
+                                SecuredPreferenceStore preferenceStore = SecuredPreferenceStore.getSharedInstance();
+                                preferenceStore.edit().putString("tel",usertel.getText().toString()).apply();
+                                preferenceStore.edit().putString("password", password.getText().toString()).apply();
+                                Intent intent = new Intent(RegisterFragment.this.getActivity(),All_EI_Info.class);
+                                startActivity(intent);
+                            }
+                        });
+                    }else {
+                        //注册失败逻辑
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getContext(), "注册失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
-    public void tijiao(View view) {
+
+    public void play(View view, String tel) {
+        //获取验证码
+        SMSSDK.getVerificationCode("86",tel);
+    }
+
+    public void tijiao(View view, String tel) {
         //在提交按钮的监听事件里先通过EditText获取到用户所输入的验证码，然后和刚才的那个手机号一起提交到后台验证
         String number = checkCode.getText().toString();
-        SMSSDK.submitVerificationCode("86","18838951998",number);
+        SMSSDK.submitVerificationCode("86",tel,number);
     }
 
     @Override
@@ -155,10 +222,34 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                         PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},6);
                 }
-                play(view);
+
+                //判断用户手机号合法不合法
+                String tel = usertel.getText().toString();
+                Log.e("Tel", tel);
+                if (CheckInputUtils.checkTel(tel)){
+                    play(view, tel);
+                } else {
+                    Toast.makeText(getContext(), "手机号输入不合法，请输入注入:18895621356的形式", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.submmit:
-                tijiao(view);
+                //检测两次输入的密码是否合法且相同
+                if (CheckInputUtils.checkPassword(password.getText().toString()) && CheckInputUtils.checkPassword(password_confirm.getText().toString())){
+                    if (password.getText().toString().equals(password_confirm.getText().toString())){
+                        //判断用户手机号合法不合法，要注意这里也要对手机号进行验证，因为可能会出现用户在申请验证码之后更改手机号的状况
+                        String tel_submmit = usertel.getText().toString();
+                        if (CheckInputUtils.checkTel(tel_submmit)){
+                            //我们把网络请求的方法写在提交之中
+                            tijiao(view,tel_submmit);
+                        }
+                    }else {
+                        Toast.makeText(getContext(), "对不起，请再次确认密码！", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(getContext(), "对不起，密码格式错误!", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
         }
     }
