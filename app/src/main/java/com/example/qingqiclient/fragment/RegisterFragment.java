@@ -3,13 +3,10 @@ package com.example.qingqiclient.fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,17 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.Toast;
 
 
 import com.example.qingqiclient.All_EI_Info;
-import com.example.qingqiclient.MainActivity;
 import com.example.qingqiclient.R;
 import com.example.qingqiclient.utils.CheckInputUtils;
 import com.example.qingqiclient.utils.Constant;
-import com.example.qingqiclient.utils.JsonUtils;
-import com.mob.MobSDK;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,10 +35,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static cn.smssdk.SMSSDK.getSupportedCountries;
 import static cn.smssdk.SMSSDK.getVerificationCode;
-import static cn.smssdk.SMSSDK.submitVerificationCode;
-import static java.security.AccessController.getContext;
 
 /**
  *这个碎片主要用来进行用户的注册
@@ -64,7 +54,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_register, container, false);
+        View v = inflater.inflate(R.layout.fragment_register_forget_password, container, false);
         //先初始化各个控件
         checkCode  = (EditText) v.findViewById(R.id.check_Code);
         submmit = (Button) v.findViewById(R.id.submmit);

@@ -9,8 +9,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.qingqiclient.entity.EI;
+import com.example.qingqiclient.utils.CheckInputUtils;
 import com.example.qingqiclient.utils.Constant;
 import com.example.qingqiclient.utils.JsonUtils;
 
@@ -68,6 +70,11 @@ public class AddEIActivity extends AppCompatActivity {
         add_singleEI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //加入对输入的手机号的检查
+                if (CheckInputUtils.checkTel(tel.getText().toString())){
+                    Toast.makeText(AddEIActivity.this, "输入的手机号不合法，请输入不带空格的十一位手机号码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 sendSaveEIWithOkHttp(smsaddress);
                 Intent intent = new Intent(AddEIActivity.this, All_EI_Info.class);
                 startActivity(intent);

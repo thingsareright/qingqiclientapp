@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.qingqiclient.All_EI_Info;
 import com.example.qingqiclient.R;
+import com.example.qingqiclient.utils.CheckInputUtils;
 import com.example.qingqiclient.utils.Constant;
 
 import java.io.BufferedReader;
@@ -100,7 +102,14 @@ public class LoginFragment extends Fragment implements View .OnClickListener{
                     password_edit.setText("密码不能为空！");
                     break;
                 }
-                //注意，关于手机号和密码是否合法的检查还没有写******************TODO
+                if (!CheckInputUtils.checkTel(tel)){
+                    Toast.makeText(getContext(), "手机号输入非法，请输入不带空格的十一位手机号码！", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                if (!CheckInputUtils.checkPassword(password)){
+                    Toast.makeText(getContext(), "密码必须是由字母，数字，下划线组成的6到26位字符串", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 //第三步，向服务器发送请求验证账号和密码
                 String checkStr = Constant.getServer() + "/user/login?tel=" + tel + "&password=" + password;
                 System.out.println(checkStr);

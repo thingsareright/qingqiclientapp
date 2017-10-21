@@ -3,6 +3,7 @@ package com.example.qingqiclient;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.example.qingqiclient.entity.EI;
 import com.example.qingqiclient.utils.Constant;
 import com.example.qingqiclient.utils.JsonUtils;
+import com.mob.tools.utils.LocationHelper;
 
 import java.io.IOException;
 import java.util.List;
@@ -97,7 +99,8 @@ public class EI_Info extends AppCompatActivity {
                 awb_state.setText("物流单号：" + ei.getAwb() + "   （" + Constant.stateString.get(ei.getState().intValue()) +"）");
                 tel.setText("电话号码：" + ei.getTel());
                 sms.setText("短信信息：" + ei.getSms());
-                smsaddress.setText("取货地址（快递被快递公司送到的位置）：" + Constant.smsAddress.get(ei.getId().intValue()));
+                Log.e("*******************", ei.getId().toString());
+                smsaddress.setText("取货地址（快递被快递公司送到的位置）：" + Constant.smsAddress.get(ei.getSmsaddress().intValue()));
                 address.setText("您指定的收货地址： " + ei.getAddress());
                 //如果已经取到货，那么按钮就不会显示
                 if (ei.getState() != 0){
