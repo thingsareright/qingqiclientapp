@@ -56,7 +56,9 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
     //要申请的权限
     private static String[] PERMISSION_REQUEST_LIST = {
             Manifest.permission.READ_CONTACTS,  Manifest.permission.READ_PHONE_STATE,  Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.RECEIVE_SMS,    Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.RECEIVE_SMS,    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.GET_TASKS,
+            Manifest.permission.READ_SMS, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.INTERNET
     };
 
     @Override
@@ -148,6 +150,7 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
                             .url(s).build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
+                    response.body().close();
 
                     if (responseData.equals("1")){
                         //注册成功
@@ -204,16 +207,6 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
                     }
                 }
 
-
-                //判断用户手机号合法不合法
-                String tel = usertel.getText().toString();
-                Log.e("Tel", tel);
-                if (CheckInputUtils.checkTel(tel)){
-                    play(view, tel);
-                } else {
-                    Toast.makeText(getContext(), "手机号输入不合法，请输入:18895621356的形式", Toast.LENGTH_SHORT).show();
-                }
-
                 break;
             case R.id.submmit:
                 //检测两次输入的密码是否合法且相同
@@ -250,6 +243,19 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
             }
         }
 
+        //如果已经申请了权限，那么直接发验证码
+        if (stringsList.size() == 0){
+            //判断用户手机号合法不合法
+            String tel = usertel.getText().toString();
+            Log.e("Tel", tel);
+            if (CheckInputUtils.checkTel(tel)){
+                play(getView(), tel);
+            } else {
+                Toast.makeText(getContext(), "手机号输入不合法，请输入:18895621356的形式", Toast.LENGTH_SHORT).show();
+            }
+        }
+        //否则就在申请后回调onRequestPermissionsResult方法
+
         String[] strings = new String[stringsList.size()];
 
         Log.e("*******************", String.valueOf(stringsList.toArray(strings).length));
@@ -268,6 +274,17 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
                         }
                     }
                 }
+
+
+                //判断用户手机号合法不合法，这是回调权限申请时用的
+                String tel = usertel.getText().toString();
+                Log.e("Tel", tel);
+                if (CheckInputUtils.checkTel(tel)){
+                    play(getView(), tel);
+                } else {
+                    Toast.makeText(getContext(), "手机号输入不合法，请输入:18895621356的形式", Toast.LENGTH_SHORT).show();
+                }
+
 
                 break;
             default:

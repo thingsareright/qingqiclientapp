@@ -23,6 +23,7 @@ import com.example.qingqiclient.All_EI_Info;
 import com.example.qingqiclient.R;
 import com.example.qingqiclient.utils.CheckInputUtils;
 import com.example.qingqiclient.utils.Constant;
+import com.mob.MobSDK;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,7 +60,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     //要申请的权限
     private static final String[] PERMISSION_REQUEST_LIST = {
             Manifest.permission.READ_CONTACTS,  Manifest.permission.READ_PHONE_STATE,  Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.RECEIVE_SMS,    Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.RECEIVE_SMS,    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.GET_TASKS,
+            Manifest.permission.READ_SMS, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.INTERNET
     };
 
     @Override
@@ -79,7 +82,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         submmit.setOnClickListener(this);
 
         //在onCreate的方法里对SDK进行初始化
-        //MobSDK.init(getContext(), "21bdeae252f01","27d63bf79a9c63d7839de041f8603422");
+        MobSDK.init(getContext(), "21bdeae252f01","27d63bf79a9c63d7839de041f8603422");
         handler = new EventHandler(){
             @Override
             public void afterEvent(int event, int result, Object data) {
@@ -151,6 +154,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                             .url(s).build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
+                    response.body().close();
 
                     if (responseData.equals("1")){
                         //注册成功
@@ -192,6 +196,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         //在提交按钮的监听事件里先通过EditText获取到用户所输入的验证码，然后和刚才的那个手机号一起提交到后台验证
         String number = checkCode.getText().toString();
         SMSSDK.submitVerificationCode("86",tel,number);
+        //反注册将Handler销毁
+        SMSSDK.unregisterEventHandler(handler);
     }
 
     @Override
@@ -265,7 +271,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
         ArrayList<String> stringsList = new ArrayList<>();
         for (String permission : PERMISSION_REQUEST_LIST){
-            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED){
+            if (ContextCompat.checkSelfPermission(getContext(), permission) != PackageManager.PERMISSION_GRANTED){
                 //如果权限已经申请，那么就不申请
                 stringsList.add(permission);
             }

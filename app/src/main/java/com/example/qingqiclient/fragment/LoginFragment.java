@@ -155,6 +155,7 @@ public class LoginFragment extends Fragment implements View .OnClickListener{
                         responseBulder.append(line);
                     }
                     String response = responseBulder.toString();
+
                     if (response != null ){
                         if (response.equals("1")){
                             //请求成功且验证成功的执行逻辑

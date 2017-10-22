@@ -17,6 +17,7 @@ public class EI implements Serializable{
     private Long state;
     private Long userid;
     private Long smsaddress;
+    private String name;
 
     public Long getId() {
         return id;
@@ -80,5 +81,13 @@ public class EI implements Serializable{
 
     public void setSmsaddress(Long smsaddress) {
         this.smsaddress = smsaddress;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

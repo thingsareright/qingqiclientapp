@@ -14,10 +14,17 @@
          />
 
     <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入收件人姓名："
+        />
+
+    <EditText
         android:id="@+id/add_tel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="请输入此快递收获者手机号："
+        android:hint="请输入此快递收货者手机号："
          />
 
 

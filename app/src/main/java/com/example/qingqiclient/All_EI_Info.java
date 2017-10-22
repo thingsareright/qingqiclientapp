@@ -137,6 +137,7 @@ public class All_EI_Info extends AppCompatActivity implements View.OnClickListen
                             .url(Constant.getServer() + "/ei/getEIofOneUser?tel=" + tel + "&password=" + password).build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
+                    response.body().close();
 
                     //解析请求，获得EI数组
                     eiList = JsonUtils.parseEIListWithGSON(responseData);

@@ -37,6 +37,7 @@ public class AddEIActivity extends AppCompatActivity {
     private Spinner smsaddressSpinner;
     private EditText address;
     private Button add_singleEI;
+    private EditText name;
     //默认短信地址选择
     private static Long smsaddress = new Long(0);
 
@@ -64,6 +65,7 @@ public class AddEIActivity extends AppCompatActivity {
         smsaddressSpinner = (Spinner) findViewById(R.id.add_smsaddress);
         address = (EditText) findViewById(R.id.add_address);
         add_singleEI = (Button) findViewById(R.id.add_singleEI);
+        name = (EditText) findViewById(R.id.name);
         smsaddress = new Long(0);
         smsaddressSpinner.setOnItemSelectedListener( new OnItemSelectedListenerImpl());
 
@@ -73,6 +75,22 @@ public class AddEIActivity extends AppCompatActivity {
                 //加入对输入的手机号的检查
                 if (!CheckInputUtils.checkTel(tel.getText().toString())){
                     Toast.makeText(AddEIActivity.this, "输入的手机号不合法，请输入不带空格的十一位手机号码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (awb.getText().toString().isEmpty()){
+                    Toast.makeText(AddEIActivity.this, "输入的物流单号为空，请输入正确的物流单号", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (sms.getText().toString().isEmpty()){
+                    Toast.makeText(AddEIActivity.this, "输入的快递短信为空，请输入正确的快递短信", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (address.getText().toString().isEmpty()){
+                    Toast.makeText(AddEIActivity.this, "输入的收货地址为空，请输入正确的收货地址", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (name.getText().toString().isEmpty()){
+                    Toast.makeText(AddEIActivity.this, "输入的快递收件人为空，请输入正确的收件人姓名", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 sendSaveEIWithOkHttp(smsaddress);
@@ -126,13 +144,14 @@ public class AddEIActivity extends AppCompatActivity {
                     String urlStr = Constant.getServer() + "/ei/saveData?&usertel="+ usertel + "&password=" + password + "&awb="
                             +  awb.getText().toString() + "&tel=" + tel.getText().toString() + "&sms="+
                             sms.getText().toString() + "&address=" + address.getText().toString() +
-                            "&smsaddress=" + smsaddress;
+                            "&smsaddress=" + smsaddress + "&name=" + name.getText().toString();
                     Log.e(LOG, "网络请求地址：" + urlStr);
                     Request request = new Request.Builder()
                             //指定访问的远程服务器
                             .url(urlStr).build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().toString();
+                    response.body().close();
                     if (responseData.equals(1)){
                         //在下面这个方法中执行界面更新
                         UIchange();

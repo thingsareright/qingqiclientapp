@@ -30,6 +30,7 @@ public class EI_Info extends AppCompatActivity {
     private TextView smsaddress;
     private TextView address;
     private Button delete_btn;
+    private TextView name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class EI_Info extends AppCompatActivity {
         smsaddress = (TextView) findViewById(R.id.smsaddress);
         address = (TextView) findViewById(R.id.address);
         delete_btn = (Button) findViewById(R.id.delete);
+        name = (TextView) findViewById(R.id.name);
 
 
 
@@ -99,6 +101,7 @@ public class EI_Info extends AppCompatActivity {
                 awb_state.setText("物流单号：" + ei.getAwb() + "   （" + Constant.stateString.get(ei.getState().intValue()) +"）");
                 tel.setText("电话号码：" + ei.getTel());
                 sms.setText("短信信息：" + ei.getSms());
+                name.setText("收件人姓名：" + ei.getName());
                 Log.e("*******************", ei.getId().toString());
                 smsaddress.setText("取货地址（快递被快递公司送到的位置）：" + Constant.smsAddress.get(ei.getSmsaddress().intValue()));
                 address.setText("您指定的收货地址： " + ei.getAddress());
@@ -140,6 +143,8 @@ public class EI_Info extends AppCompatActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
+                    response.body().close();
+
                     if (responseData.equals("1")){
                         //删除成功则返回EI信息总视图，并弹出Toast
                         goBackToLastActivity();
