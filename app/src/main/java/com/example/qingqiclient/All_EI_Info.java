@@ -1,10 +1,12 @@
 package com.example.qingqiclient;
 /**
  * 这个布局用来展示用户的已发送快递信息，用户可直接在此页面上查看各快递信息的状态，当然可以点击某快递信息，在新的详细信息活动中删除那些还未取的快递
+ * 这个活动是singletask的，而且每次到这个页面都会刷新，支持下拉刷新
  */
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +36,15 @@ public class All_EI_Info extends AppCompatActivity implements View.OnClickListen
     //用于表示悬浮按钮
     private FloatingActionButton add_btn;
 
+    //下拉刷新
+    private SwipeRefreshLayout swipeRefresh;
+
+    //recyclerview
+    private RecyclerView recyclerView;
+
+    //状态标志，为1表示是首次建立此页面，不是1表示是非初次加载此页面，执行刷新操作
+    private int state = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +59,57 @@ public class All_EI_Info extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        //发送请求，获得数据
-        sendRequestforEIList();
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.recycler_view_refresh);
+        //对下拉刷新进行基本的设置
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //执行刷新逻辑
+                refreshEIList();
+            }
+        });
+
+        //发送请求，获得数据
+        sendRequestforEIList(1);
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //下面的语句是为了让这个页面具有自动刷新功能
+        if (state != 1){
+            //执行下拉刷新的逻辑
+            refreshEIList();
+            state++;
+        }
+    }
+
+    /**
+     * 执行刷新逻辑
+     */
+    private void refreshEIList() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } ;
+                sendRequestforEIList(2); //flag为1表示是首次请求，为2表示是刷新请求
+
+            }
+        }).start();
     }
 
 
@@ -58,7 +117,7 @@ public class All_EI_Info extends AppCompatActivity implements View.OnClickListen
      * 下面进行网络请求
      * 我们使用OkHttp开源库
      */
-    private void sendRequestforEIList(){
+    private void sendRequestforEIList(final int flag){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -82,7 +141,13 @@ public class All_EI_Info extends AppCompatActivity implements View.OnClickListen
                     //解析请求，获得EI数组
                     eiList = JsonUtils.parseEIListWithGSON(responseData);
                     //在下面这个方法中执行界面更新
-                    UIchange(eiList);
+                    if (flag == 1){
+                        //首次请求
+                        UIchange(eiList);
+                    } else if (flag == 2){
+                        refresh(eiList);    //下拉刷新请求
+                    }
+
                     System.out.println(eiList);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -91,12 +156,29 @@ public class All_EI_Info extends AppCompatActivity implements View.OnClickListen
         }).start();
     }
 
+    /**
+     * 下拉刷新的逻辑
+     * @param eiList
+     */
+    private void refresh(final List<EI> eiList) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //下拉刷新请求
+                EIAdapter eiAdapter = new EIAdapter(eiList);
+                recyclerView.setAdapter(eiAdapter);
+                eiAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);  //下拉刷新结束
+            }
+        });
+
+    }
+
     private void UIchange(final List<EI> eiList) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 //下面开始组装RecyclerView
-                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(All_EI_Info.this);
                 recyclerView.setLayoutManager(layoutManager);
                 EIAdapter eiAdapter = new EIAdapter(eiList);

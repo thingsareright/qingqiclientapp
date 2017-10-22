@@ -3,6 +3,7 @@ package com.example.qingqiclient.fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -39,6 +43,7 @@ import static cn.smssdk.SMSSDK.getVerificationCode;
 
 /**
  *这个碎片主要用来进行用户的注册
+ * 注意权限是批量申请的
  */
 public class RegisterFragment extends Fragment implements View.OnClickListener{
 
@@ -50,6 +55,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private EditText password_confirm;  //用户再次输入密码确认
     //全局变量Handler，处理验证码回调
     private EventHandler handler;
+
+    //要申请的权限
+    private static final String[] PERMISSION_REQUEST_LIST = {
+            Manifest.permission.READ_CONTACTS,  Manifest.permission.READ_PHONE_STATE,  Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.RECEIVE_SMS,    Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -188,29 +199,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         switch (view.getId()){
             case R.id.send_checkCode:
                 //先申请一下各种运行时权限
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) !=
-                        PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_CONTACTS},1);
-                }
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) !=
-                        PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_PHONE_STATE},2);
-                }
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                        PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},3);
-                }
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECEIVE_SMS) !=
-                        PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.RECEIVE_SMS},4);
-                }
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) !=
-                        PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_SMS},5);
-                }
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                        PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},6);
+                //先检查还有哪些运行时权限没有申请
+                String[] new_Request_Permission_List = checkPermission();
+                if (new_Request_Permission_List.length != 0){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        ActivityCompat.requestPermissions(getActivity(), new_Request_Permission_List, 1);
+                    }
                 }
 
                 //判断用户手机号合法不合法
@@ -249,49 +243,37 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch(requestCode){
             case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-                }else {
-                    Toast.makeText(getContext(), "权限不够，系统不能为您正常服务", Toast.LENGTH_SHORT).show();
+                if (grantResults != null && permissions != null) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            Toast.makeText(getContext(), "抱歉，您没有同意足够的权限，系统可能无法为您正常服务！", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    }
                 }
-                break;
-            case 2:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
 
-                }else {
-                    Toast.makeText(getContext(), "权限不够，系统不能为您正常服务", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case 3:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-                }else {
-                    Toast.makeText(getContext(), "权限不够，系统不能为您正常服务", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case 4:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-                }else {
-                    Toast.makeText(getContext(), "权限不够，系统不能为您正常服务", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case 5:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-                }else {
-                    Toast.makeText(getContext(), "权限不够，系统不能为您正常服务", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case 6:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-                }else {
-                    Toast.makeText(getContext(), "权限不够，系统不能为您正常服务", Toast.LENGTH_SHORT).show();
-                }
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 根据申请列表组建未申请的权限列表
+     */
+    private String[]  checkPermission() {
+
+        ArrayList<String> stringsList = new ArrayList<>();
+        for (String permission : PERMISSION_REQUEST_LIST){
+            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED){
+                //如果权限已经申请，那么就不申请
+                stringsList.add(permission);
+            }
+        }
+
+        String[] strings = new String[stringsList.size()];
+
+
+        return  stringsList.toArray(strings);
     }
 }

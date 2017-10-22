@@ -71,7 +71,7 @@ public class AddEIActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //加入对输入的手机号的检查
-                if (CheckInputUtils.checkTel(tel.getText().toString())){
+                if (!CheckInputUtils.checkTel(tel.getText().toString())){
                     Toast.makeText(AddEIActivity.this, "输入的手机号不合法，请输入不带空格的十一位手机号码", Toast.LENGTH_SHORT).show();
                     return;
                 }
