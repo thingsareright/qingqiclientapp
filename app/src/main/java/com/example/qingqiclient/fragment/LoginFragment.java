@@ -59,6 +59,8 @@ public class LoginFragment extends Fragment implements View .OnClickListener{
         password_edit = (EditText) v.findViewById(R.id.password);
         motto_text  = (TextView) v.findViewById(R.id.motto);
 
+
+
         //要先对加密开源库进行初始化
         try {
             SecuredPreferenceStore.init(getActivity().getApplicationContext(), new DefaultRecoveryHandler());
@@ -80,6 +82,15 @@ public class LoginFragment extends Fragment implements View .OnClickListener{
             e.printStackTrace();
         } catch (NoSuchProviderException e) {
             e.printStackTrace();
+        }
+        //为方便用户登录，我们把用户上次输入的账号和密码提取出来，并设置到相应的文本输入框中，但是要注意要先检查一下是否是二次输入
+        //要注意先把tel和password的值存入SharedPreferences中，我们这里用了一个开源库进行加密
+        SecuredPreferenceStore preferenceStore = SecuredPreferenceStore.getSharedInstance();
+        String tel = preferenceStore.getString("tel","0");
+        String password = preferenceStore.getString("password","0");
+        if (!(tel.equals("0") || password.equals("0"))){
+            tel_edit.setText(tel);
+            password_edit.setText(password);
         }
         return v;
     }

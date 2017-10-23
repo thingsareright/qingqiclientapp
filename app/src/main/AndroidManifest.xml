@@ -65,10 +65,10 @@
         <!-- 通过AndroidManifest配置AppKey和AppSecret，如果你选择通过代码配置，则不需要配置以下meta-data -->
         <meta-data android:name="Mob-AppKey" android:value="21bdeae252f01"/>
         <meta-data android:name="Mob-AppSecret" android:value="27d63bf79a9c63d7839de041f8603422"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

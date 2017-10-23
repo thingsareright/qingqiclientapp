@@ -28,11 +28,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableEntryException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.NoSuchPaddingException;
+
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import devliving.online.securedpreferencestore.DefaultRecoveryHandler;
 import devliving.online.securedpreferencestore.SecuredPreferenceStore;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -130,6 +140,12 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
 
         SMSSDK.registerEventHandler(handler);
 
+        //要先对加密开源库进行初始化
+        try {
+            SecuredPreferenceStore.init(getActivity().getApplicationContext(), new DefaultRecoveryHandler());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return v;
     }
 
