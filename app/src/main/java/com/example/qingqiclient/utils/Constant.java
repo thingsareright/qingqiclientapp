@@ -29,6 +29,8 @@ public class Constant {
         smsAddress.add(9,"菊五自助一区");
         smsAddress.add(10,"菊五自助二区");
         smsAddress.add(11,"菊五分拣区");
+        smsAddress.add(12,"荷园洗浴中心二楼");
+        smsAddress.add(13,"其它");
 
 
         stateString.add(0,"未取货");

@@ -51,6 +51,8 @@ public class AddEIActivity extends AppCompatActivity {
         spinnerMap.put(new Long(3), "菊二自助区（东）"); spinnerMap.put(new Long(4), "菊二自助区（北）"); spinnerMap.put(new Long(5), "菊二顺丰专区");
         spinnerMap.put(new Long(6), "菊二2-2延时区"); spinnerMap.put(new Long(7), "菊二前台"); spinnerMap.put(new Long(8), "京东快递");
         spinnerMap.put(new Long(9), "菊五自助一区"); spinnerMap.put(new Long(10), "菊五自助二区"); spinnerMap.put(new Long(11), "菊五分拣区");
+        spinnerMap.put(new Long(12), "荷园洗浴中心二楼");
+        spinnerMap.put(new Long(13), "其它");
     }
 
     @Override
