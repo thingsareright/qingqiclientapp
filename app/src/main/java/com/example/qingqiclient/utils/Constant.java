@@ -19,18 +19,19 @@ public class Constant {
     static {
         smsAddress.add(0,"西门");
         smsAddress.add(1,"东门");
-        smsAddress.add(2,"菊二分拣区");
-        smsAddress.add(3,"菊二自助区（东）");
-        smsAddress.add(4,"菊二自助区（北）");
-        smsAddress.add(5,"菊二顺丰专区");
-        smsAddress.add(6,"菊二2-2延时区");
-        smsAddress.add(7,"菊二前台");
-        smsAddress.add(8,"京东快递");
-        smsAddress.add(9,"菊五自助一区");
-        smsAddress.add(10,"菊五自助二区");
-        smsAddress.add(11,"菊五分拣区");
-        smsAddress.add(12,"荷园洗浴中心二楼");
-        smsAddress.add(13,"其它");
+        smsAddress.add(2,"南门");
+        smsAddress.add(3,"菊二分拣区");
+        smsAddress.add(4,"菊二自助区（东）");
+        smsAddress.add(5,"菊二自助区（北）");
+        smsAddress.add(6,"菊二顺丰专区");
+        smsAddress.add(7,"菊二2-2延时区");
+        smsAddress.add(8,"菊二前台");
+        smsAddress.add(9,"京东快递");
+        smsAddress.add(10,"菊五自助一区");
+        smsAddress.add(11,"菊五自助二区");
+        smsAddress.add(12,"菊五分拣区");
+        smsAddress.add(13,"荷园洗浴中心二楼");
+        smsAddress.add(14,"其它");
 
 
         stateString.add(0,"未取货");
