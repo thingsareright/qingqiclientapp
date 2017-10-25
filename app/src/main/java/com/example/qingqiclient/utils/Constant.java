@@ -37,6 +37,8 @@ public class Constant {
         stateString.add(0,"未取货");
         stateString.add(1,"轻骑已取货");
         stateString.add(2,"抱歉，没取到货");
+        stateString.add(3,"配送中");
+        stateString.add(4,"已送达");
     }
 
     public static String getServer() {
