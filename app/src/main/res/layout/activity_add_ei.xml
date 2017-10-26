@@ -9,32 +9,35 @@
     <EditText
         android:id="@+id/add_awb"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:hint="请输入物流编号："
-         />
+        />
 
     <EditText
         android:id="@+id/name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:hint="请输入收件人姓名："
         />
 
     <EditText
         android:id="@+id/add_tel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:hint="请输入此快递收货者手机号："
          />
 
 
-
     <EditText
         android:id="@+id/add_sms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
         android:hint="请复制短信信息："
-        />
+        android:lines="6" />
 
 
     <Spinner
@@ -42,16 +45,17 @@
         android:entries="@array/smsaddress"
         android:layout_width="wrap_content"
         android:spinnerMode="dialog"
-        android:layout_height="wrap_content"
-
-       />
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        />
 
 
 
     <EditText
         android:id="@+id/add_address"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="3"
         android:hint="请输入收货地址："
         >
     </EditText>
@@ -59,7 +63,8 @@
     <Button
         android:id="@+id/add_singleEI"
         android:layout_width="88dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:text="通知轻骑"
          />
 

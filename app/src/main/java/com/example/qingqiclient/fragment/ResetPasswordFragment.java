@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.qingqiclient.All_EI_Info;
 import com.example.qingqiclient.R;
 import com.example.qingqiclient.utils.CheckInputUtils;
@@ -39,6 +41,7 @@ public class ResetPasswordFragment extends Fragment implements View.OnClickListe
     private EditText new_password;
     private EditText new_password_confirmed;
     private Button submmit_btn;
+    private ImageView background_img;
 
 
     @Override
@@ -53,6 +56,10 @@ public class ResetPasswordFragment extends Fragment implements View.OnClickListe
         //设置按钮点击事件
         submmit_btn = (Button) v.findViewById(R.id.submmit);
         submmit_btn.setOnClickListener(this);
+        background_img = (ImageView) v.findViewById(R.id.background_img);
+
+        //解决图片太大加载难的问题,使用Glide库动态加载图片
+        Glide.with(getContext()).load(R.drawable.reset).into(background_img);
 
         return v;
     }

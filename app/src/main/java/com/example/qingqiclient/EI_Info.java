@@ -91,36 +91,40 @@ public class EI_Info extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //这里进行UI操作
-                //第一步，解析JSON数据
-                final EI ei = JsonUtils.parseEIWithGSON(responseData);
-                if (ei == null)
-                    return;
+                try {
+                    //这里进行UI操作
+                    //第一步，解析JSON数据
+                    final EI ei = JsonUtils.parseEIWithGSON(responseData);
+                    if (ei == null)
+                        return;
 
-                //第二步，根据ei数据来填充UI
-                awb_state.setText("物流单号：" + ei.getAwb() + "   （" + Constant.stateString.get(ei.getState().intValue()) +"）");
-                tel.setText("电话号码：" + ei.getTel());
-                sms.setText("短信信息：" + ei.getSms());
-                name.setText("收件人姓名：" + ei.getName());
-                Log.e("*******************", ei.getId().toString());
-                smsaddress.setText("取货地址（快递被快递公司送到的位置）：" + Constant.smsAddress.get(ei.getSmsaddress().intValue()));
-                address.setText("您指定的收货地址： " + ei.getAddress());
-                //如果已经取到货，那么按钮就不会显示
-                if (ei.getState() != 0){
-                    delete_btn.setVisibility(View.GONE);
-                }
-                //对按钮设置点击监听器
-                delete_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //删除此记录
-                        try {
-                            sendDeleteRequestWithOkHttp(ei.getId());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    //第二步，根据ei数据来填充UI
+                    awb_state.setText("物流单号：" + ei.getAwb() + "   （" + Constant.stateString.get(ei.getState().intValue()) +"）");
+                    tel.setText("电话号码：" + ei.getTel());
+                    sms.setText("短信信息：" + ei.getSms());
+                    name.setText("收件人姓名：" + ei.getName());
+                    smsaddress.setText("取货地址（快递被快递公司送到的位置）：" + Constant.smsAddress.get(ei.getSmsaddress().intValue()));
+                    Log.e("EI_Info", ei.getSmsaddress().toString());
+                    address.setText("您指定的收货地址： " + ei.getAddress());
+                    //如果已经取到货，那么按钮就不会显示
+                    if (ei.getState() != 0){
+                        delete_btn.setVisibility(View.GONE);
                     }
-                });
+                    //对按钮设置点击监听器
+                    delete_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //删除此记录
+                            try {
+                                sendDeleteRequestWithOkHttp(ei.getId());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (Exception e){
+                    Toast.makeText(EI_Info.this, "数据已被删除，请刷新页面", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -176,4 +180,7 @@ public class EI_Info extends AppCompatActivity {
             }
         });
     }
+
+
+
 }

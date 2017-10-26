@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">qingqiclient</string>
+    <string name="app_name">轻骑速递</string>
     <array name="smsaddress">
         <item>西门</item>
         <item>东门</item>
+        <item>南门</item>
         <item>菊二分拣区</item>
         <item>菊二自助区（东）</item>
         <item>菊二自助区（北）</item>

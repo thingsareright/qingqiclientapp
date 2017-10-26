@@ -39,7 +39,7 @@ public class AddEIActivity extends AppCompatActivity {
     private Button add_singleEI;
     private EditText name;
     //默认短信地址选择
-    private static Long smsaddress = new Long(0);
+    private static int smsaddress =  (0);
 
     //日志标识
     private static final String LOG = "AddEIActivity";
@@ -47,12 +47,14 @@ public class AddEIActivity extends AppCompatActivity {
 
     private static Map<Long, String> spinnerMap = new HashMap<>();
     static {
-        spinnerMap.put(new Long(0), "西门"); spinnerMap.put(new Long(1), "东门"); spinnerMap.put(new Long(2), "菊二分拣区");
-        spinnerMap.put(new Long(3), "菊二自助区（东）"); spinnerMap.put(new Long(4), "菊二自助区（北）"); spinnerMap.put(new Long(5), "菊二顺丰专区");
-        spinnerMap.put(new Long(6), "菊二2-2延时区"); spinnerMap.put(new Long(7), "菊二前台"); spinnerMap.put(new Long(8), "京东快递");
-        spinnerMap.put(new Long(9), "菊五自助一区"); spinnerMap.put(new Long(10), "菊五自助二区"); spinnerMap.put(new Long(11), "菊五分拣区");
-        spinnerMap.put(new Long(12), "荷园洗浴中心二楼");
-        spinnerMap.put(new Long(13), "其它");
+        spinnerMap.put(new Long(0), "西门");              spinnerMap.put(new Long(1), "东门");
+        spinnerMap.put(new Long(2), "南门");              spinnerMap.put(new Long(3), "菊二分拣区");
+        spinnerMap.put(new Long(4), "菊二自助区（东）");  spinnerMap.put(new Long(5), "菊二自助区（北）");
+        spinnerMap.put(new Long(6), "菊二顺丰专区");      spinnerMap.put(new Long(7), "菊二2-2延时区");
+        spinnerMap.put(new Long(8), "菊二前台");          spinnerMap.put(new Long(9), "京东快递");
+        spinnerMap.put(new Long(10), "菊五自助一区");     spinnerMap.put(new Long(11), "菊五自助二区");
+        spinnerMap.put(new Long(12), "菊五分拣区");       spinnerMap.put(new Long(13), "荷园洗浴中心二楼");
+        spinnerMap.put(new Long(14), "其它");
     }
 
     @Override
@@ -68,7 +70,7 @@ public class AddEIActivity extends AppCompatActivity {
         address = (EditText) findViewById(R.id.add_address);
         add_singleEI = (Button) findViewById(R.id.add_singleEI);
         name = (EditText) findViewById(R.id.name);
-        smsaddress = new Long(0);
+        smsaddress = (0);
         smsaddressSpinner.setOnItemSelectedListener( new OnItemSelectedListenerImpl());
 
         add_singleEI.setOnClickListener(new View.OnClickListener() {
@@ -109,15 +111,16 @@ public class AddEIActivity extends AppCompatActivity {
                                    int position, long id) {
             //将用户选择的信息转换为对应的Long
             String smsAddressData = parent.getItemAtPosition(position).toString();
-            ArrayList smsaddressList = (ArrayList) getKey(spinnerMap, smsAddressData);
-            if (smsaddressList.size() != 0){
-                smsaddress = (Long) smsaddressList.get(0);
+            Long smsaddressList = getKey(spinnerMap, smsAddressData);
+            if (smsaddressList != null){
+                smsaddress =  smsaddressList.intValue();
             }
         }
 
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
             // TODO Auto-generated method stub
+
         }
 
     }
@@ -127,7 +130,7 @@ public class AddEIActivity extends AppCompatActivity {
      * 下面进行网络请求
      * 我们使用OkHttp开源库
      */
-    private void sendSaveEIWithOkHttp(final Long smsaddress){
+    private void sendSaveEIWithOkHttp(final int smsaddress){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -182,24 +185,13 @@ public class AddEIActivity extends AppCompatActivity {
     }
 
 
-    public Object getKey(Map map, Object value) {
-        Object o = null;
-        ArrayList all = new ArrayList(); // 建一个数组用来存放符合条件的KEY值
-
-        /*
-         * 这里关键是那个entrySet()的方法,它会返回一个包含Map.Entry集的Set对象.
-         * Map.Entry对象有getValue和getKey的方法,利用这两个方法就可以达到从值取键的目的了 *
-         */
-
-        Set set = map.entrySet();
-        Iterator it = set.iterator();
-        while (it.hasNext()) {
-            Map.Entry entry = (Map.Entry) it.next();
-            if (entry.getValue().equals(value)) {
-                o = entry.getKey();
-                all.add(o); // 把符合条件的项先放到容器中,下面再一次性打印出
+    public Long getKey(Map<Long, String> map, Object value) {
+        Long key = new Long(14);            //这个要与列表"其它"这一项相符
+        for (Map.Entry<Long, String> entry : map.entrySet()) {
+            if(value.equals(entry.getValue())){
+                key=entry.getKey();
             }
         }
-        return all;
+        return key;
     }
 }

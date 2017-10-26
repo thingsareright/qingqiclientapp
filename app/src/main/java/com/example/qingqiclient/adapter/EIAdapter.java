@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.qingqiclient.EI_Info;
 import com.example.qingqiclient.R;
 import com.example.qingqiclient.entity.EI;
+import com.example.qingqiclient.utils.Constant;
 
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class EIAdapter extends RecyclerView.Adapter<EIAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         EI ei = eiList.get(position);
         holder.awb.setText(ei.getAwb());
-        holder.state.setText(ei.getState().toString());
+        holder.state.setText(Constant.stateString.get(ei.getState().intValue()));
     }
 
     @Override

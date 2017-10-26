@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.qingqiclient.All_EI_Info;
 import com.example.qingqiclient.R;
 import com.example.qingqiclient.utils.CheckInputUtils;
@@ -38,6 +40,8 @@ import javax.crypto.NoSuchPaddingException;
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler;
 import devliving.online.securedpreferencestore.SecuredPreferenceStore;
 
+import static com.example.qingqiclient.R.drawable.login;
+
 
 public class LoginFragment extends Fragment implements View .OnClickListener{
 
@@ -45,12 +49,13 @@ public class LoginFragment extends Fragment implements View .OnClickListener{
     private EditText tel_edit;
     private EditText password_edit;
     private TextView motto_text;
+    private ImageView background_img;
     private static String LOG = "MainActivity";
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_login, container,false);  ;
+        View v = inflater.inflate(R.layout.fragment_login, container,false);
 
         //获得各组件
         btn_login = (Button) v.findViewById(R.id.btn_login);
@@ -58,8 +63,10 @@ public class LoginFragment extends Fragment implements View .OnClickListener{
         tel_edit = (EditText) v.findViewById(R.id.tel);
         password_edit = (EditText) v.findViewById(R.id.password);
         motto_text  = (TextView) v.findViewById(R.id.motto);
+        background_img = (ImageView) v.findViewById(R.id.background_img);
 
-
+        //解决图片太大加载难的问题,使用Glide库动态加载图片
+        Glide.with(getContext()).load(R.drawable.login).into(background_img);
 
         //要先对加密开源库进行初始化
         try {
@@ -109,6 +116,9 @@ public class LoginFragment extends Fragment implements View .OnClickListener{
                 String checkStr = Constant.getServer() + "/user/login?tel=" + tel + "&password=" + password;
                 System.out.println(checkStr);
                 doGet(checkStr);
+                break;
+            default:
+                break;
         }
     }
 
@@ -209,5 +219,25 @@ public class LoginFragment extends Fragment implements View .OnClickListener{
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * 为了在密码变化后及时弄出，我觉得应该在每次变得可见的时候都这么弄
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        //为方便用户登录，我们把用户上次输入的账号和密码提取出来，并设置到相应的文本输入框中，但是要注意要先检查一下是否是二次输入
+        //要注意先把tel和password的值存入SharedPreferences中，我们这里用了一个开源库进行加密
+        SecuredPreferenceStore preferenceStore = SecuredPreferenceStore.getSharedInstance();
+        String tel = preferenceStore.getString("tel","0");
+        String password = preferenceStore.getString("password","0");
+        if (!(tel.equals("0") || password.equals("0"))){
+            tel_edit.setText(tel);
+            password_edit.setText(password);
+        } else {
+            tel_edit.setText("");
+            password_edit.setText("");
+        }
     }
 }

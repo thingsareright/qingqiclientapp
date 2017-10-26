@@ -16,9 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
 import com.example.qingqiclient.All_EI_Info;
 import com.example.qingqiclient.R;
 import com.example.qingqiclient.utils.CheckInputUtils;
@@ -41,15 +43,13 @@ import java.util.List;
 
 import javax.crypto.NoSuchPaddingException;
 
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
+
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler;
 import devliving.online.securedpreferencestore.SecuredPreferenceStore;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static cn.smssdk.SMSSDK.getVerificationCode;
 
 /**
  *这个碎片主要用来进行用户的注册
@@ -62,6 +62,7 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
     private EditText usertel;   //用户输入手机号注册
     private EditText password;  //用户输入密码
     private EditText password_confirm;  //用户再次输入密码确认
+    private ImageView background_img;   //背景图片
 
     //验证码全局变量
     private static String code = new String("0");
@@ -77,6 +78,7 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
         usertel = (EditText) v.findViewById(R.id.register_tel);
         password = (EditText) v.findViewById(R.id.register_password);
         password_confirm = (EditText) v.findViewById(R.id.register_password_confirm);
+        background_img = (ImageView) v.findViewById(R.id.background_img);
         //提交按钮要先设置为不可见
         submmit.setVisibility(View.INVISIBLE);
 
@@ -84,7 +86,8 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
         send_checkCode_btn.setOnClickListener(this);
         submmit.setOnClickListener(this);
 
-
+        //解决图片太大加载难的问题,使用Glide库动态加载图片
+        Glide.with(getContext()).load(R.drawable.forgetpassword).into(background_img);
 
         //要先对加密开源库进行初始化
         try {

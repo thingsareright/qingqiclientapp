@@ -201,4 +201,14 @@ public class All_EI_Info extends AppCompatActivity implements View.OnClickListen
                 break;
         }
     }
+
+    /**
+     * 因为这个活动是singleTask的，所以，需要在这个页面中实现自动刷新逻辑
+     * @param intent
+     */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        sendRequestforEIList(2);
+    }
 }
