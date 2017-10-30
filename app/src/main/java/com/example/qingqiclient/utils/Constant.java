@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Constant {
     //服务器域名或者IP地址
-    private static final String server = "http://meng1.tunnel.qydev.com" ;
+    private static final String server = "http://120.78.178.186:5001/qingqi" ;
 
     //下面是一个常量数组，用于解释预选的快递短信收货地点
     public static List<String> smsAddress = new ArrayList<>();

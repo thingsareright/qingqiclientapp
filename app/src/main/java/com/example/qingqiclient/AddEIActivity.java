@@ -1,27 +1,25 @@
 package com.example.qingqiclient;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.qingqiclient.entity.EI;
 import com.example.qingqiclient.utils.CheckInputUtils;
 import com.example.qingqiclient.utils.Constant;
-import com.example.qingqiclient.utils.JsonUtils;
+import com.example.qingqiclient.utils.FontManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import devliving.online.securedpreferencestore.SecuredPreferenceStore;
 import okhttp3.OkHttpClient;
@@ -40,6 +38,8 @@ public class AddEIActivity extends AppCompatActivity {
     private EditText name;
     //默认短信地址选择
     private static int smsaddress =  (0);
+
+
 
     //日志标识
     private static final String LOG = "AddEIActivity";
@@ -72,6 +72,10 @@ public class AddEIActivity extends AppCompatActivity {
         name = (EditText) findViewById(R.id.name);
         smsaddress = (0);
         smsaddressSpinner.setOnItemSelectedListener( new OnItemSelectedListenerImpl());
+
+
+        //对字体进行初始化改变
+        FontManager.changeFonts((ViewGroup) getWindow().getDecorView().findViewById(R.id.activity_add_ei), (Activity) this);
 
         add_singleEI.setOnClickListener(new View.OnClickListener() {
             @Override

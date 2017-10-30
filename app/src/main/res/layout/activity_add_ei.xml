@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_add_ei"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
+        android:textSize="20dp"
         android:hint="请输入物流编号："
         />
 
@@ -19,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
+        android:textSize="20dp"
         android:hint="请输入收件人姓名："
         />
 
@@ -27,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
+        android:textSize="17dp"
         android:hint="请输入此快递收货者手机号："
          />
 
@@ -36,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
+        android:textSize="17dp"
         android:hint="请复制短信信息："
         android:lines="6" />
 
@@ -46,6 +51,7 @@
         android:layout_width="wrap_content"
         android:spinnerMode="dialog"
         android:layout_height="0dp"
+        android:textSize="17dp"
         android:layout_weight="2"
         />
 
@@ -56,16 +62,31 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
+        android:textSize="17dp"
         android:hint="请输入收货地址："
         >
     </EditText>
-
-    <Button
-        android:id="@+id/add_singleEI"
-        android:layout_width="88dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
-        android:text="通知轻骑"
-         />
+        android:layout_weight="2">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/add_singleEI"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:text="通知轻骑"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
 
 </LinearLayout>

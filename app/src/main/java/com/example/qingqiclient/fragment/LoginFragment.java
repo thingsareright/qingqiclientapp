@@ -1,5 +1,6 @@
 package com.example.qingqiclient.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import com.example.qingqiclient.All_EI_Info;
 import com.example.qingqiclient.R;
 import com.example.qingqiclient.utils.CheckInputUtils;
 import com.example.qingqiclient.utils.Constant;
+import com.example.qingqiclient.utils.FontManager;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -67,6 +69,8 @@ public class LoginFragment extends Fragment implements View .OnClickListener{
 
         //解决图片太大加载难的问题,使用Glide库动态加载图片
         Glide.with(getContext()).load(R.drawable.login).into(background_img);
+        FontManager.changeFonts((ViewGroup) getActivity().getWindow().getDecorView().findViewById(R.id.login_fragment), (Activity) getActivity());
+
 
         //要先对加密开源库进行初始化
         try {

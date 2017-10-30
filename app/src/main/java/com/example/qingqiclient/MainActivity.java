@@ -1,5 +1,6 @@
 package com.example.qingqiclient;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,6 +22,7 @@ import com.example.qingqiclient.fragment.LoginFragment;
 import com.example.qingqiclient.fragment.RegisterFragment;
 import com.example.qingqiclient.fragment.ResetPasswordFragment;
 import com.example.qingqiclient.utils.Constant;
+import com.example.qingqiclient.utils.FontManager;
 import com.example.qingqiclient.utils.Secret;
 
 import java.io.BufferedReader;
@@ -68,7 +71,8 @@ public class MainActivity extends FragmentActivity implements ViewPager.OnPageCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //对字体进行初始化改变
+        FontManager.changeFonts((ViewGroup) getWindow().getDecorView().findViewById(R.id.main_acticity), (Activity) this);
         initView();
     }
 

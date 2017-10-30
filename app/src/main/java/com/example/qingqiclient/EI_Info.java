@@ -1,16 +1,21 @@
 package com.example.qingqiclient;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.qingqiclient.entity.EI;
 import com.example.qingqiclient.utils.Constant;
+import com.example.qingqiclient.utils.FontManager;
 import com.example.qingqiclient.utils.JsonUtils;
 import com.mob.tools.utils.LocationHelper;
 
@@ -21,6 +26,8 @@ import devliving.online.securedpreferencestore.SecuredPreferenceStore;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static android.icu.text.Normalizer.YES;
 
 public class EI_Info extends AppCompatActivity {
 
@@ -45,8 +52,14 @@ public class EI_Info extends AppCompatActivity {
         address = (TextView) findViewById(R.id.address);
         delete_btn = (Button) findViewById(R.id.delete);
         name = (TextView) findViewById(R.id.name);
+        sms.setMovementMethod(ScrollingMovementMethod.getInstance());   //设置短信的滚动办法
+        awb_state.setMovementMethod(ScrollingMovementMethod.getInstance());
+        tel.setMovementMethod(ScrollingMovementMethod.getInstance());
+        address.setMovementMethod(ScrollingMovementMethod.getInstance());
+        name.setMovementMethod(ScrollingMovementMethod.getInstance());
 
-
+        //对字体进行初始化改变
+        FontManager.changeFonts((ViewGroup) getWindow().getDecorView().findViewById(R.id.ei_info_activity), (Activity) this);
 
         //先获取上个活动传来的Intent中的数据
         Intent intent = getIntent();

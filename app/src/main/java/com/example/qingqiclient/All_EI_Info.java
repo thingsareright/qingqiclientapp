@@ -4,6 +4,7 @@ package com.example.qingqiclient;
  * 这个活动是singletask的，而且每次到这个页面都会刷新，支持下拉刷新
  */
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,10 +14,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 
 import com.example.qingqiclient.adapter.EIAdapter;
 import com.example.qingqiclient.entity.EI;
 import com.example.qingqiclient.utils.Constant;
+import com.example.qingqiclient.utils.FontManager;
 import com.example.qingqiclient.utils.JsonUtils;
 
 import java.io.IOException;
@@ -71,7 +74,8 @@ public class All_EI_Info extends AppCompatActivity implements View.OnClickListen
                 refreshEIList();
             }
         });
-
+        //对字体进行初始化改变
+        FontManager.changeFonts((ViewGroup) getWindow().getDecorView().findViewById(R.id.all_ei_info), (Activity) this);
         //发送请求，获得数据
         sendRequestforEIList(1);
 

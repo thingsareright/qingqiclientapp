@@ -1,5 +1,6 @@
 package com.example.qingqiclient.adapter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import com.example.qingqiclient.EI_Info;
 import com.example.qingqiclient.R;
 import com.example.qingqiclient.entity.EI;
 import com.example.qingqiclient.utils.Constant;
+import com.example.qingqiclient.utils.FontManager;
 
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class EIAdapter extends RecyclerView.Adapter<EIAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_ei, parent, false);
         final ViewHolder holder = new ViewHolder(view);
+
 
         //注册点击事件
         holder.eiView.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +73,7 @@ public class EIAdapter extends RecyclerView.Adapter<EIAdapter.ViewHolder> {
         public ViewHolder(View view) {
             super(view);
             eiView = view;
+            FontManager.changeFonts((ViewGroup) view.getRootView(), (Activity) view.getContext());
             this.awb = view.findViewById(R.id.awb) ;
             this.state = view.findViewById(R.id.state);
         }
